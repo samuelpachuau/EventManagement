@@ -30,9 +30,10 @@ html, body {
     gap:50px;
     align-items:center;
     text-decoration: none;
+    font-weight: 400;
 }
 
-.register-link{
+.register-link, .upcoming-events-link{
     display: inline-block;
     text-decoration: none;
     align-items: center;
@@ -41,13 +42,16 @@ html, body {
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
-.register-link:visited {
+.upcoming-events-link:visited, .register-link:visited {
     color:black;
     text-decoration: none;
 }
 
-.register-link:hover, .search-btn:hover {
-    transform: translateY(-5px);}
+.upcoming-events-link:hover, .register-link:hover, .search-btn:hover {
+    transform: translateY(-5px);
+}
+
+
 
 /* Search container */
 .search-container {

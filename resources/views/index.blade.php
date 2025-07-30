@@ -22,6 +22,9 @@
                 </form>
             </li>
             <li>
+                <a href="{{ route('register') }}" class="upcoming-events-link">Upcoming Events</a>
+            </li>
+            <li>
                 <a href="{{ route('register') }}" class="register-link">Register</a>
             </li>
         </ul>
