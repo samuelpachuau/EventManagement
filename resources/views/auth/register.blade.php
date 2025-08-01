@@ -66,8 +66,9 @@ body {
         {{ session()->get("error") }}
     </div>
     @endif
+    <a href="{{ route("login.post") }}" > Already have an account?login</a>
 <button class="btn btn-primary w-100 py-2" type="submit">Register</button> 
- 
+
 </form> 
 </main>
 
