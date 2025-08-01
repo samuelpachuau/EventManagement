@@ -22,13 +22,15 @@
                 </form>
             </li>
             <li>
-                <a href="{{ route('register') }}" class="upcoming-events-link">Upcoming Events</a>
+                <a href="{{ route('upcomingEvents') }}" class="upcoming-events-link">Upcoming Events</a>
             </li>
             <li>
                 <a href="{{ route('register') }}" class="register-link">Register</a>
             </li>
         </ul>
     </nav>
+
+
 
 </body>
 </html>
