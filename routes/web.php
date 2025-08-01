@@ -5,15 +5,24 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+
+Route::get('/myprofile', [ProfileController::class, 'show'])->name('myprofile');
+Route::get('/myprofile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/myprofile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/myprofile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
+
 
 
 
 
 Route::get('/past-events', [EventController::class, 'pastEvents'])->name('past.events');
 
-Route::get('/settings', function () {
-    return view('settings'); // Make sure you have a settings.blade.php view
-})->name('settings');
+
+Route::get('/myprofile', function () {
+    $user = Auth::user();  // get the currently logged-in user
+    return view('myprofile', compact('user'));
+})->name('myprofile')->middleware('auth');
 
 
 Route::get('/upcoming-events', [EventController::class, 'upcomingEvents'])->name('upcomingEvents');
