@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
+
 
 class EventController extends Controller
 {
@@ -18,9 +20,14 @@ class EventController extends Controller
         return view('events.index', compact('events', 'query'));
     }
 
-    public function index()
-    {
-        $events = Event::latest()->get();
-        return view('index',compact('events'));
+  public function index()
+{
+    $events = Event::latest()->get();
+
+    if (Auth::check()) {
+        return view('home', compact('events')); // if user is logged in
+    } else {
+        return view('index', compact('events')); // guest view
     }
+}
 }

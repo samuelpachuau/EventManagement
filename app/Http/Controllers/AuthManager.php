@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 class AuthManager extends Controller
 {
@@ -19,10 +21,12 @@ class AuthManager extends Controller
             "password"=> "required",
         ]);
         $credentials=$request->only("email","password");
-        if(Auth::attempt($credentials)){
-            return redirect() ->intended(   route("home"));
-        }
-        return redirect(route("login"))->with("error","Invalid email or password");
+         if (Auth::attempt($credentials)) {
+         
+        return redirect()->route('home')->with('success', 'Login successful');
+    }
+
+    return back()->with('error', 'Invalid login credentials');
     }
     function Register(){
         return view("auth.register");
@@ -37,8 +41,7 @@ class AuthManager extends Controller
     $user = new User();
     $user->name = $validated['name'];
     $user->email = $validated['email'];
-    $user->password = bcrypt($validated['password']); // VERY IMPORTANT
-
+    $user->password = bcrypt($validated['password']); 
     if ($user->save()) {
         return redirect()->route("login")->with("success", "Registered successfully. Please login.");
     } else {
