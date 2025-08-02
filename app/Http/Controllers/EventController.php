@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 
 class EventController extends Controller
@@ -30,4 +32,11 @@ class EventController extends Controller
         return view('index', compact('events')); // guest view
     }
 }
+
+public function pastEvents()
+{
+    $pastEvents = Event::where('date', '<', Carbon::now())->get();
+    return view('events.past', compact('pastEvents'));
+}
+
 }
