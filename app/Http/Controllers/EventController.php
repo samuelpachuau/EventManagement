@@ -40,4 +40,14 @@ public function pastEvents()
     return view('events.past', compact('pastEvents'));
 }
 
+public function upcomingEvents()
+{
+    // Fetch only events with start_date >= today
+    $events = Event::where('start_date', '>=', now())
+        ->orderBy('start_date', 'asc')
+        ->get();
+
+    return view('upcomingEvents', compact('events'));
+}
+
 }
