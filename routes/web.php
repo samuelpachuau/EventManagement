@@ -6,6 +6,9 @@ use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EventBookingController;
+use App\Models\Booking;
+use App\Models\Event;
 
 Route::get('/myprofile', [ProfileController::class, 'show'])->name('myprofile');
 Route::get('/myprofile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,3 +52,30 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/')->with('success', 'Logged out successfully.');
 })->name('logout');
+
+
+
+Route::get('/events/{event}/book', [EventBookingController::class, 'create'])->name('events.book');
+Route::post('/events/{event}/book', [EventBookingController::class, 'store'])->name('events.book.store');
+
+Route::get('/debug-booking', function () {
+    $booking = Booking::latest()->first(); // get latest booking
+
+    return [
+        'booking_id'   => $booking->id,
+        'event_id'     => $booking->event_id,
+        'event_exists' => Event::find($booking->event_id) ? true : false,
+    ];
+});
+Route::get('/test-pdf/{id}', function ($id) {
+    $booking = \App\Models\Booking::with(['event', 'user'])->findOrFail($id);
+
+    $qrCode = base64_encode(
+        \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(150)->generate('Ticket#' . $booking->id)
+    );
+
+    return PDF::loadView('tickets.template', [
+        'booking' => $booking,
+        'qrCode' => $qrCode,
+    ])->download('test.pdf');
+});

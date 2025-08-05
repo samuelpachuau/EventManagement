@@ -25,6 +25,11 @@ class Event extends Model
         'slug',
     ];
 
+    protected $casts = [
+    'start_date' => 'datetime',
+    'end_date'   => 'datetime',
+];
+
     
     public function organizer(): BelongsTo
     {
