@@ -2,7 +2,11 @@
 <html>
 <head>
     <title>Upcoming Events</title>
+<<<<<<< HEAD
+    @vite('resources/css/app.css') {{-- Only include this if you're using Vite --}}
+=======
     @vite('resources/css/app.css') {{-- if using Vite --}}
+>>>>>>> 6b2ca914c38bf93fe83a4c36da6c42942a60b0fc
 </head>
 <body class="bg-gray-100 py-8">
     <div class="max-w-6xl mx-auto">
@@ -29,9 +33,21 @@
                         <div class="p-4">
                             <h2 class="text-xl font-semibold mb-2">{{ $event->name }}</h2>
                             <p class="text-gray-600 text-sm mb-2">{{ $event->location }}</p>
+<<<<<<< HEAD
+                            <p class="text-gray-500 text-sm mb-4">
+                                {{ $event->start_date->format('d M Y, h:i A') }}
+                            </p>
+
+                            {{-- Book Now Button --}}
+                            <a href="{{ route('events.book', $event->id) }}"
+                               class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                                Book Now
+                            </a>
+=======
                             <p class="text-gray-500 text-sm">
                                 {{ $event->start_date->format('d M Y, h:i A') }}
                             </p>
+>>>>>>> 6b2ca914c38bf93fe83a4c36da6c42942a60b0fc
                         </div>
                     </div>
                 @endforeach
