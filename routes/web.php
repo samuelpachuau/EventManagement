@@ -79,3 +79,7 @@ Route::get('/test-pdf/{id}', function ($id) {
         'qrCode' => $qrCode,
     ])->download('test.pdf');
 });
+
+
+Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+

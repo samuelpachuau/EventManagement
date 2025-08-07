@@ -30,54 +30,50 @@ class EventController extends Controller
         return view('events.index', compact('events', 'query'));
     }
 
-  public function index()
-{
-    $events = Event::latest()->get();
+    public function index()
+    {
+        $events = Event::latest()->get();
 
-    if (Auth::check()) {
-        return view('home', compact('events')); // if user is logged in
-    } else {
-        return view('index', compact('events')); // guest view
+        if (Auth::check()) {
+            return view('home', compact('events')); // if user is logged in
+        } else {
+            return view('index', compact('events')); // guest view
+        }
     }
-}
 
-public function pastEvents()
-{
-    $pastEvents = Event::where('date', '<', Carbon::now())->orderBy('date', 'desc')->paginate(6);
+    public function pastEvents()
+    {
+        $pastEvents = Event::where('date', '<', Carbon::now())->orderBy('date', 'desc')->paginate(6);
 
-    return view('events.past', compact('pastEvents'));
-}
-public function book(Request $request)
-{
-   
-    $booking = new Booking();
-    $booking->user_id = auth()->id();
-    $booking->event_id = $request->event_id;
-    $booking->save();
-
+        return view('events.past', compact('pastEvents'));
+    }
+    public function book(Request $request)
+    {
     
-    Mail::to($booking->user->email)->send(new TicketMail($booking));
+        $booking = new Booking();
+        $booking->user_id = auth()->id();
+        $booking->event_id = $request->event_id;
+        $booking->save();
 
-    return redirect()->back()->with('success', 'Booking confirmed. Ticket sent to your email.');
-}
-public function upcomingEvents()
-{
-   
-    $events = Event::where('start_date', '>=', now())
-        ->orderBy('start_date', 'asc')
-        ->get();
+        
+        Mail::to($booking->user->email)->send(new TicketMail($booking));
 
-    return view('upcomingEvents', compact('events'));
-}
+        return redirect()->back()->with('success', 'Booking confirmed. Ticket sent to your email.');
+    }
+    public function upcomingEvents()
+    {
+    
+        $events = Event::where('start_date', '>=', now())
+            ->orderBy('start_date', 'asc')
+            ->get();
 
-public function upcomingEvents()
-{
-    // Fetch only events with start_date >= today
-    $events = Event::where('start_date', '>=', now())
-        ->orderBy('start_date', 'asc')
-        ->get();
+        return view('upcomingEvents', compact('events'));
+    }
 
-    return view('upcomingEvents', compact('events'));
-}
+    public function show($id)
+    {
+        $event = Event::find($id);
+        return view('events.show',compact('event'));
+    }
 
 }
