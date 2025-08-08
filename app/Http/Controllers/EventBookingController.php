@@ -43,7 +43,7 @@ class EventBookingController extends Controller
 }
 
 
-    // Show booking form for guest or public users
+   
     public function create(Event $event)
     {
         return view('bookings.create', compact('event'));
@@ -51,22 +51,28 @@ class EventBookingController extends Controller
 
     // Store guest booking and send ticket
     public function store(Request $request, Event $event)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-        ]);
+{
+    $user = Auth::user();
 
-        $booking = Booking::create([
-            'user_id' => auth()->id(),
-            'event_id' => $event->id,
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-
-        Mail::to($booking->email)->send(new TicketMail($booking));
-
-        return redirect()->route('events.book', $event->id)
-                         ->with('success', 'Booking successful! Ticket sent to your email.');
+    if (!$user) {
+        return redirect()->back()->with('error', 'You must be logged in to book this event.');
     }
+
+    if (Booking::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
+        return redirect()->back()->with('error', 'You have already booked this event.');
+    }
+
+    $booking = Booking::create([
+        'user_id' => $user->id,
+        'event_id' => $event->id,
+        'name' => $user->name,
+        'email' => $user->email,
+    ]);
+
+    Mail::to($user->email)->send(new TicketMail($booking));
+
+    return redirect()->route('events.book', $event->id)
+                     ->with('success', 'Booking successful! Ticket sent to your email.');
+}
+
 }

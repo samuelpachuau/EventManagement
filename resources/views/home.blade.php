@@ -140,7 +140,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('myprofile') }}">My Profile</a></li>
-                        <li><a href="{{ route('past.events') }}">Past Events</a></li>
+                        <li><a href="{{ route('events.past') }}">Past Events</a></li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
