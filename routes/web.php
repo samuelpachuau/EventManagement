@@ -31,20 +31,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/myprofile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/myprofile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
 
-    // Event Bookings
+    
     Route::get('/events/{event}/book', [EventBookingController::class, 'create'])->name('events.book');
     Route::post('/events/{event}/book', [EventBookingController::class, 'store'])->name('events.book.store');
 
-    // Past Events
+    
     Route::get('/past-events', [EventController::class, 'pastEvents'])->name('events.past');
 
-    // Logout
+   
     Route::post('/logout', function () {
         Auth::logout();
         return redirect('/')->with('success', 'Logged out successfully.');
     })->name('logout');
 
-    // Debug Booking Info (for development only)
+    
     Route::get('/debug-booking', function () {
         $booking = Booking::latest()->first();
 

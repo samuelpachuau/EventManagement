@@ -166,7 +166,7 @@
     @endif
 
     <div class="container">
-        <!-- Optional content here -->
+        
     </div>
 
 </body>
