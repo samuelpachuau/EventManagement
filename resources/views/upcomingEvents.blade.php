@@ -27,6 +27,23 @@
                 <a href="{{ route('register') }}" class="register-link">Register</a>
             </li>
             @endguest
+            @auth
+            <li class="dropdown">
+                <a href="#" class="profile-link">
+                    <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ route('myprofile') }}">My Profile</a></li>
+                    <li><a href="{{ route('past.events') }}">Past Events</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            @endauth
         </ul>
     </nav>
     @if(session()->has("success"))
