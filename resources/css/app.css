@@ -90,7 +90,7 @@ html, body {
     border: none;
     cursor: pointer;
     font-size: 18px;
-    color: black;
+    color: rgb(0, 0, 0);
     padding: 5px;
 }
 
@@ -105,7 +105,7 @@ html, body {
 /*UPCOMING EVENTS */
 
 .upcoming-events-body {
-    background-color: rgb(160, 160, 97);
+    background-color: rgb(255, 255, 255);
 }
 
 /* Container grid: 3 columns with gap */
@@ -183,6 +183,107 @@ html, body {
     color: black;
 }
 
+/*Dropdown Menu */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
 
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .navbar-links li {
+            position: relative;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .search-container input {
+            padding: 5px;
+        }
+
+        .search-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            list-style: none;
+            min-width: 160px;
+            padding: 0.5rem 0;
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li {
+            padding: 0.5rem 1rem;
+        }
+
+        .dropdown-menu li a,
+        .dropdown-menu li form button {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .dropdown-menu li a:hover,
+        .dropdown-menu li form button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
 
 

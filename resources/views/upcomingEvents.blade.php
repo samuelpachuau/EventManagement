@@ -3,9 +3,42 @@
 <head>
     <title>Upcoming Events</title>
     @vite('resources/css/app.css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
  
 </head>
 <body class="upcoming-events-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">Get Your Tickets</div>
+        <ul class="navbar-links">
+            <li class="search-container">
+                <form action="{{ url('/search') }}" method="GET" style="display: flex;">
+                    <input type="text" name="q" placeholder="Search..." class="search-input">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </li>
+            <li>
+                <a href="{{ route('upcomingEvents') }}" class="upcoming-events-link">Upcoming Events</a>
+            </li>
+            @guest
+            <li>
+                <a href="{{ route('register') }}" class="register-link">Register</a>
+            </li>
+            @endguest
+        </ul>
+    </nav>
+    @if(session()->has("success"))
+    <div class="alert alert-success">
+        {{ session()->get("success") }}
+    </div>
+    @endif
+     @if(session()->has("error"))
+    <div class="alert alert-danger">
+        {{ session()->get("error") }}
+    </div>
+    @endif
 
     <div class="container">
         <h1 class="page-title">UCPOMING EVENTS</h1>

@@ -33,12 +33,7 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::latest()->get();
-
-        if (Auth::check()) {
-            return view('home', compact('events')); // if user is logged in
-        } else {
-            return view('index', compact('events')); // guest view
-        }
+        return view('index', compact('events')); // or 'index' if you're using that
     }
 
     public function pastEvents()
