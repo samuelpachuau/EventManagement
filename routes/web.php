@@ -11,40 +11,41 @@ use App\Models\Event;
 
 // Public Routes
 Route::get('/', function () {
-    return Auth::check() ? view('home') : view('index');
+    if (Auth::check()) {
+        return view('home');
+    }
+    $events = Event::latest()->get();
+    return view('index', compact('events'));
 })->name('home');
 
-Route::get('/login', [AuthManager::class, 'login'])->name('login');
-Route::post('/login', [AuthManager::class, 'loginPost'])->name('login.post');
+Route::get('/login', [AuthManager::class, 'login'])->name('login')->middleware('guest');
+Route::post('/login', [AuthManager::class, 'loginPost'])->name('login.post')->middleware('guest');
 
-Route::get('/register', [AuthManager::class, 'register'])->name('register');
-Route::post('/register', [AuthManager::class, 'registerPost'])->name('register.post');
+Route::get('/register', [AuthManager::class, 'register'])->name('register')->middleware('guest');
+Route::post('/register', [AuthManager::class, 'registerPost'])->name('register.post')->middleware('guest');
 
 Route::get('/upcoming-events', [EventController::class, 'upcomingEvents'])->name('upcomingEvents');
+Route::get('/past-events', [EventController::class, 'pastEvents'])->name('events.past');
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
-
     // Profile
     Route::get('/myprofile', [ProfileController::class, 'show'])->name('myprofile');
     Route::get('/myprofile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/myprofile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/myprofile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
 
-    
-    Route::get('/events/{event}/book', [EventBookingController::class, 'create'])->name('events.book');
-    Route::post('/events/{event}/book', [EventBookingController::class, 'store'])->name('events.book.store');
-
-    
-    Route::get('/past-events', [EventController::class, 'pastEvents'])->name('events.past');
-
-   
+    // Logout
     Route::post('/logout', function () {
         Auth::logout();
         return redirect('/')->with('success', 'Logged out successfully.');
     })->name('logout');
 
-    
+    // Event booking
+    Route::get('/events/{event}/book', [EventBookingController::class, 'create'])->name('events.book');
+    Route::post('/events/{event}/book', [EventBookingController::class, 'store'])->name('events.book.store');
+
+    // Debug route
     Route::get('/debug-booking', function () {
         $booking = Booking::latest()->first();
 
@@ -55,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
         ];
     });
 
-    // Test PDF (for development only)
+    // Test PDF
     Route::get('/test-pdf/{id}', function ($id) {
         $booking = \App\Models\Booking::with(['event', 'user'])->findOrFail($id);
 
@@ -65,10 +66,11 @@ Route::middleware(['auth'])->group(function () {
 
         return PDF::loadView('tickets.template', [
             'booking' => $booking,
-            'qrCode' => $qrCode,
+            'qrCode'  => $qrCode,
         ])->download('test.pdf');
     });
 });
 
-// Admin/CRUD Events (could be protected further with admin middleware)
+// Admin/CRUD Events
 Route::resource('events', EventController::class);
+Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');

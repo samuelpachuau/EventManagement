@@ -19,6 +19,7 @@ class EventController extends Controller
         $this->middleware('auth')->only(['book', 'pastEvents']);
     }
 
+<<<<<<< HEAD
     
     public function upcomingEvents()
     {
@@ -87,3 +88,47 @@ public function pastEvents()
 
 
 }
+=======
+    public function index()
+    {
+        $events = Event::latest()->get();
+        return view('index', compact('events')); // or 'index' if you're using that
+    }
+
+    public function pastEvents()
+    {
+        $pastEvents = Event::where('date', '<', Carbon::now())->orderBy('date', 'desc')->paginate(6);
+
+        return view('events.past', compact('pastEvents'));
+    }
+    public function book(Request $request)
+    {
+    
+        $booking = new Booking();
+        $booking->user_id = auth()->id();
+        $booking->event_id = $request->event_id;
+        $booking->save();
+
+        
+        Mail::to($booking->user->email)->send(new TicketMail($booking));
+
+        return redirect()->back()->with('success', 'Booking confirmed. Ticket sent to your email.');
+    }
+    public function upcomingEvents()
+    {
+    
+        $events = Event::where('start_date', '>=', now())
+            ->orderBy('start_date', 'asc')
+            ->get();
+
+        return view('upcomingEvents', compact('events'));
+    }
+
+    public function show($id)
+    {
+        $event = Event::find($id);
+        return view('events.show',compact('event'));
+    }
+
+}
+>>>>>>> 57f52a8e0a2be49e34503b56c2f3088e8813c8d3
