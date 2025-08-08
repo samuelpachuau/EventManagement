@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Oswald:wght@200..700&family=Press+Start+2P&display=swap');
+
+
+
 html, body {
     margin: 0;
     padding: 0;
@@ -86,7 +90,7 @@ html, body {
     border: none;
     cursor: pointer;
     font-size: 18px;
-    color: black;
+    color: rgb(0, 0, 0);
     padding: 5px;
 }
 
@@ -98,5 +102,188 @@ html, body {
     margin-right: 5px;
 }
 
+/*UPCOMING EVENTS */
+
+.upcoming-events-body {
+    background-color: rgb(255, 255, 255);
+}
+
+/* Container grid: 3 columns with gap */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding:20px;
+}
+
+/* Card layout */
+.event-card {
+    background-color: transparent;
+    border: transparent;
+    overflow: hidden;
+    
+}
+
+/* Image wrapper */
+.event-image-wrapper {
+    width: 100%;
+    height:500px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+
+.event-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* No image fallback */
+.no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 14px;
+}
+
+/* Text styling */
+.event-info {
+    padding: 12px;
+}
+
+.event-info h2 {
+    font-family: 'Oswald','sans-serif';
+    margin:6px 0 0;
+    font-size: 40px;
+}
+
+.event-info p {
+    margin: 4px 0;
+    color: #000000;
+    font-size: 20px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 40px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.event-card-link {
+    text-decoration: none;
+}
+.event-card-link:visited {
+    text-decoration: none;
+    color: black;
+}
+
+/*Dropdown Menu */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .navbar-links li {
+            position: relative;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .search-container input {
+            padding: 5px;
+        }
+
+        .search-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            list-style: none;
+            min-width: 160px;
+            padding: 0.5rem 0;
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li {
+            padding: 0.5rem 1rem;
+        }
+
+        .dropdown-menu li a,
+        .dropdown-menu li form button {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .dropdown-menu li a:hover,
+        .dropdown-menu li form button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
 
 

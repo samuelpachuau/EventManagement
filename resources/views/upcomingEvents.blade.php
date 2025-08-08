@@ -2,57 +2,72 @@
 <html>
 <head>
     <title>Upcoming Events</title>
-<<<<<<< HEAD
-    @vite('resources/css/app.css') {{-- Only include this if you're using Vite --}}
-=======
-    @vite('resources/css/app.css') {{-- if using Vite --}}
->>>>>>> 6b2ca914c38bf93fe83a4c36da6c42942a60b0fc
+    @vite('resources/css/app.css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ 
 </head>
-<body class="bg-gray-100 py-8">
-    <div class="max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-center">🎟 Upcoming Events</h1>
+<body class="upcoming-events-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">Get Your Tickets</div>
+        <ul class="navbar-links">
+            <li class="search-container">
+                <form action="{{ url('/search') }}" method="GET" style="display: flex;">
+                    <input type="text" name="q" placeholder="Search..." class="search-input">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </li>
+            <li>
+                <a href="{{ route('upcomingEvents') }}" class="upcoming-events-link">Upcoming Events</a>
+            </li>
+            @guest
+            <li>
+                <a href="{{ route('register') }}" class="register-link">Register</a>
+            </li>
+            @endguest
+        </ul>
+    </nav>
+    @if(session()->has("success"))
+    <div class="alert alert-success">
+        {{ session()->get("success") }}
+    </div>
+    @endif
+     @if(session()->has("error"))
+    <div class="alert alert-danger">
+        {{ session()->get("error") }}
+    </div>
+    @endif
+
+    <div class="container">
+        <h1 class="page-title">UCPOMING EVENTS</h1>
 
         @if($events->isEmpty())
-            <p class="text-center text-gray-600">No upcoming events right now.</p>
+            <p class="no-events-message">No upcoming events right now.</p>
         @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="events-grid">
                 @foreach($events as $event)
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        {{-- Event Image --}}
-                        @if($event->image)
-                            <img src="{{ asset('storage/' . $event->image) }}" 
-                                 alt="{{ $event->name }}" 
-                                 class="w-full h-48 object-cover">
-                        @else
-                            <div class="w-full h-48 bg-gray-300 flex items-center justify-center text-gray-500">
-                                No Image
+                    <a href="{{ route('events.show', $event->id) }}" class="event-card-link">
+                        <div class="event-card">
+                            <div class="event-image-wrapper">
+                                @if($event->image)
+                                    <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" class="event-image">
+                                @else
+                                    <div class="no-image">No Image</div>
+                                @endif
                             </div>
-                        @endif
-
-                        {{-- Event Info --}}
-                        <div class="p-4">
-                            <h2 class="text-xl font-semibold mb-2">{{ $event->name }}</h2>
-                            <p class="text-gray-600 text-sm mb-2">{{ $event->location }}</p>
-<<<<<<< HEAD
-                            <p class="text-gray-500 text-sm mb-4">
-                                {{ $event->start_date->format('d M Y, h:i A') }}
-                            </p>
-
-                            {{-- Book Now Button --}}
-                            <a href="{{ route('events.book', $event->id) }}"
-                               class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
-                                Book Now
-                            </a>
-=======
-                            <p class="text-gray-500 text-sm">
-                                {{ $event->start_date->format('d M Y, h:i A') }}
-                            </p>
->>>>>>> 6b2ca914c38bf93fe83a4c36da6c42942a60b0fc
+                            <div class="event-info">
+                                <h2>{{ $event->name }}</h2>
+                                <p>{{ $event->location }}</p>
+                                <p>{{ \Carbon\Carbon::parse($event->start_date)->format('d M Y, h:i A') }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         @endif
     </div>
+
 </body>
 </html>

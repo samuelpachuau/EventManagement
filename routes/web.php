@@ -16,6 +16,10 @@ Route::post('/myprofile/update', [ProfileController::class, 'update'])->name('pr
 Route::post('/myprofile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
 
 
+Route::get('/', function () {
+    $events = Event::latest()->get();
+    return view('index', compact('events')); // home.blade.php handles both cases
+})->name('home');
 
 
 
@@ -31,19 +35,11 @@ Route::get('/myprofile', function () {
 Route::get('/upcoming-events', [EventController::class, 'upcomingEvents'])->name('upcomingEvents');
 
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        return view('home'); // for logged-in users
-    } else {
-        return view('index'); // for guests
-    }
-})->name('home');
-
 // Auth routes
-Route::get('login', [AuthManager::class, 'login'])->name('login');
+Route::get('login', [AuthManager::class, 'login'])->name('login')->middleware('guest');
 Route::post('login', [AuthManager::class, 'loginPost'])->name('login.post');
 
-Route::get('register', [AuthManager::class, 'register'])->name('register');
+Route::get('register', [AuthManager::class, 'register'])->name('register')->middleware('guest');
 Route::post('register', [AuthManager::class, 'registerPost'])->name('register.post');
 
 // Events resource controller
@@ -79,3 +75,7 @@ Route::get('/test-pdf/{id}', function ($id) {
         'qrCode' => $qrCode,
     ])->download('test.pdf');
 });
+
+
+Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+
