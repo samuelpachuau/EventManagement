@@ -16,7 +16,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'data', // ← if you're using a JSON column in your DB
+        'data', 
     ];
 
     protected $hidden = [
@@ -32,33 +32,42 @@ class User extends Authenticatable
         ];
     }
 
-    // ✅ User has many addresses
+    
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    // ✅ User has many tickets
+    
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    // ✅ User has many payments
+   
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
-    // ✅ User has many roles (many-to-many)
+    
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_user');
     }
 
-    // ✅ User can organize many events
+    
     public function organizedEvents(): HasMany
     {
         return $this->hasMany(Event::class, 'organizer_id');
     }
+    public function bookings(): HasMany
+{
+    return $this->hasMany(Booking::class);
+}
+
+public function bookedEvents(): BelongsToMany
+{
+    return $this->belongsToMany(Event::class, 'bookings');
+}
 }

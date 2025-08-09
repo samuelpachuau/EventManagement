@@ -78,4 +78,3 @@ Route::get('/test-pdf/{id}', function ($id) {
 
 
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
-
