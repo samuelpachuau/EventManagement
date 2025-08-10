@@ -58,9 +58,7 @@ class EventBookingController extends Controller
         return redirect()->back()->with('error', 'You must be logged in to book this event.');
     }
 
-    if (Booking::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
-        return redirect()->back()->with('error', 'You have already booked this event.');
-    }
+    
 
     $booking = Booking::create([
         'user_id' => $user->id,
@@ -74,5 +72,37 @@ class EventBookingController extends Controller
     return redirect()->route('events.book', $event->id)
                      ->with('success', 'Booking successful! Ticket sent to your email.');
 }
+//ticket verifyshow
+public function directVerify($ticketCode)
+{
+    $bookingId = trim(str_replace('Ticket-', '', $ticketCode));
+
+
+    $booking = Booking::with(['event', 'user'])->find($bookingId);
+
+    if ($booking) {
+        if ($booking->checked_in) {
+            return view('tickets.verify', [
+                'status' => 'already_checked_in',
+                'booking' => $booking
+            ]);
+        }
+
+        // Mark as checked in
+        $booking->checked_in = true;
+        $booking->save();
+
+        return view('tickets.verify', [
+            'status' => 'valid',
+            'booking' => $booking
+        ]);
+    }
+
+    return view('tickets.verify', ['status' => 'invalid']);
+}
+
 
 }
+
+
+
