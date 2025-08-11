@@ -23,20 +23,20 @@
             padding: 10px 0;
         }
 
-.tab {
-    text-decoration: none;
-    color: #333;
-    margin: 0 15px;
-    padding: 10px 20px;
-    background: white;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.tab.active {
-    background-color: #5c2d91;
-    color: white;
-}
+        .tab {
+             text-decoration: none;
+             color: #333;
+             margin: 0 15px;
+             padding: 10px 20px;
+             background: white;
+             border-radius: 20px;
+            cursor: pointer;
+             font-weight: bold;
+            }
+        .tab.active {
+             background-color: #5c2d91;
+              color: white;
+        }
 
 
         .container {
