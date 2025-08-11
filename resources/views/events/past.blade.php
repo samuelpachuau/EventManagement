@@ -16,7 +16,9 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $event->name }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">
-                                {{ \Carbon\Carbon::parse($event->date)->format('F j, Y') }}
+                                {{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }}
+                                -
+                                {{ \Carbon\Carbon::parse($event->end_date)->format('F j, Y') }}
                             </h6>
                             <p class="card-text">
                                 {{ $event->description }}
