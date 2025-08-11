@@ -23,7 +23,8 @@
             </p>
             
             <p class="organizer">Organized by: {{ $event->organizer->name ?? 'N/A' }}</p>
-             <a href="{{ route('book.event', $event->id) }}" class="book-now-btn">Book Now</a>
+            <p>Price: ₹{{ number_format($event->price, 2) }}</p>
+             <a href="{{ route('events.book', $event->id) }}" class="book-now-btn">Book Now</a>
         </div>
     </div>
 </div>

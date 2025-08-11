@@ -12,7 +12,9 @@
 <body class="@yield('body-class')">
 
     <nav class="navbar">
-        <div class="navbar-brand">Get Your Tickets</div>
+        <div>
+          <a href="{{ route('home') }}" class="navbar-brand">HUAU!HUAU!</a>
+        </div>
         <ul class="navbar-links">
             {{-- Search Bar --}}
             <li class="search-container">
