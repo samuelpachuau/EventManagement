@@ -28,9 +28,12 @@ class TicketMail extends Mailable
         $userEmail = optional($this->booking->user)->email;
 
         // Generate QR Code
-        $qrCode = base64_encode(
-            QrCode::format('svg')->size(150)->generate('Ticket#' . $this->booking->id)
-        );
+        $verifyUrl = route('ticket.directVerify', ['ticket_code' => 'Ticket-' . $this->booking->id]);
+
+$qrCode = base64_encode(
+    QrCode::format('svg')->size(150)->generate($verifyUrl)
+);
+
 
         // Generate PDF
         $pdf = Pdf::loadView('tickets.template', [
