@@ -1,16 +1,74 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield("title","HUAU")</title>
-    <link href="{{ asset("assets/css/bootstrap.min.css") }}" rel="stylesheet">
-  </head>
-  <body class="d-flex align-items-center py-4 bg-body-tertiary"></body>>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @vite('resources/css/app.css')
+    @vite('resources/css/event-details.css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Huau</title>
     
-        @yield("content")
-    
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+</head>
+<body class="@yield('body-class')">
 
-  </body>
+    <nav class="navbar">
+        <div class="navbar-brand">Get Your Tickets</div>
+        <ul class="navbar-links">
+            {{-- Search Bar --}}
+            <li class="search-container">
+                <form action="{{ url('/search') }}" method="GET" style="display: flex;">
+                    <input type="text" name="q" placeholder="Search..." class="search-input">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </li>
+
+            {{-- Common Link for Everyone --}}
+            <li><a href="{{ route('upcomingEvents') }}" class="upcoming-events-link">Upcoming Events</a></li>
+
+            {{-- Guest Links --}}
+            @guest
+                <li><a href="{{ route('register') }}" class="register-link">Register</a></li>
+            @endguest
+
+            {{-- Authenticated User Links --}}
+            @auth
+                <li class="dropdown">
+                    <a href="#" class="profile-link">
+                        <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('myprofile') }}">My Profile</a></li>
+                        <li><a href="{{ route('past.events') }}">Past Events</a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            @endauth
+        </ul>
+    </nav>
+
+    {{-- Flash Messages --}}
+    @if(session()->has("success"))
+        <div class="alert alert-success">
+            {{ session()->get("success") }}
+        </div>
+    @endif
+
+    @if(session()->has("error"))
+        <div class="alert alert-danger">
+            {{ session()->get("error") }}
+        </div>
+    @endif
+
+    <div class="container">
+        @yield('content')
+    </div>
+
+</body>
 </html>

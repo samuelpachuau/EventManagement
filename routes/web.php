@@ -32,7 +32,7 @@ Route::get('/myprofile', function () {
 })->name('myprofile')->middleware('auth');
 
 
-Route::get('/upcoming-events', [EventController::class, 'upcomingEvents'])->name('upcomingEvents');
+Route::get('/upcomingEvents', [EventController::class, 'upcomingEvents'])->name('upcomingEvents');
 
 
 // Auth routes
