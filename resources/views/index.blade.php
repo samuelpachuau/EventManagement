@@ -52,7 +52,7 @@
         </ul>
     </nav>
 
-    {{-- Flash Messages --}}
+    
     @if(session()->has("success"))
         <div class="alert alert-success">
             {{ session()->get("success") }}
