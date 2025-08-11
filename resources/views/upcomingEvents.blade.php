@@ -25,6 +25,7 @@
                             <h2>{{ $event->name }}</h2>
                             <p>{{ $event->location }}</p>
                             <p>{{ \Carbon\Carbon::parse($event->start_date)->format('d M Y, h:i A') }}</p>
+                            <p>Price: ₹{{ number_format($event->price, 2) }}</p>
                         </div>
                     </div>
                 </a>

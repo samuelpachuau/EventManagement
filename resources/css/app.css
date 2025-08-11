@@ -24,7 +24,14 @@ html, body {
 .navbar-brand {
     font-family:'Press Start 2P';
     font-size: 22px;
+    color: black;
+    text-decoration: none;
 
+}
+
+.navbar-brand:visited {
+    color: black;
+    text-decoration: none;
 }
 
 .navbar-links {

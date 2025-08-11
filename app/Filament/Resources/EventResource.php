@@ -44,6 +44,12 @@ class EventResource extends Resource
                 Forms\Components\FileUpload::make('image')
                     ->image(),
                 Forms\Components\TextInput::make('slug'),
+                Forms\Components\TextInput::make('price')
+                    ->numeric()
+                    ->prefix('₹')
+                    ->required(),
+                    
+                
             ]);
     }
 
@@ -74,6 +80,9 @@ class EventResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('price')
+                    ->money('inr',true)
+                    ->sortable(),
             ])
             ->filters([
                 //

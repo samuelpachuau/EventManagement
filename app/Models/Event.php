@@ -23,6 +23,7 @@ class Event extends Model
         'organizer_id',
         'image',
         'slug',
+        'price',
     ];
 
     protected $casts = [
