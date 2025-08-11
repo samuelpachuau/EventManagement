@@ -32,7 +32,7 @@ Route::get('/myprofile', function () {
 })->name('myprofile')->middleware('auth');
 
 
-Route::get('/upcoming-events', [EventController::class, 'upcomingEvents'])->name('upcomingEvents');
+Route::get('/upcomingEvents', [EventController::class, 'upcomingEvents'])->name('upcomingEvents');
 
 
 // Auth routes
@@ -77,8 +77,16 @@ Route::get('/test-pdf/{id}', function ($id) {
 });
 
 
+
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
 //verifying ticket
 
 Route::get('/ticket/verify/{ticket_code}', [EventBookingController::class, 'directVerify'])
     ->name('ticket.directVerify');
+
+
+Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+
+Route::get('/book/{id}', [BookingController::class, 'create'])->name('book.event');
+
+
