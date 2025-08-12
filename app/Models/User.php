@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Filament\Panel;
 
 class User extends Authenticatable
 {
@@ -62,12 +63,18 @@ class User extends Authenticatable
         return $this->hasMany(Event::class, 'organizer_id');
     }
     public function bookings(): HasMany
-{
-    return $this->hasMany(Booking::class);
-}
+    {
+        return $this->hasMany(Booking::class);
+    }
 
-public function bookedEvents(): BelongsToMany
-{
-    return $this->belongsToMany(Event::class, 'bookings');
-}
+    public function bookedEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'bookings');
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Only allow users where is_admin is 1
+        return $this->is_admin === 1;
+    }
 }
