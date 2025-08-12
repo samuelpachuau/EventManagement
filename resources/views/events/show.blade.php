@@ -21,10 +21,14 @@
                 {{ $event->start_date->format('d M Y, h:i A') }} -
                 {{ $event->end_date->format('d M Y, h:i A') }}
             </p>
-            
             <p class="organizer">Organized by: {{ $event->organizer->name ?? 'N/A' }}</p>
             <p>Price: ₹{{ number_format($event->price, 2) }}</p>
-             <a href="{{ route('events.book', $event->id) }}" class="book-now-btn">Book Now</a>
+
+            @auth
+                <a href="{{ route('events.book', $event->id) }}" class="book-now-btn">Book Now</a>
+            @else
+                <a href="{{ route('register') }}" class="book-now-btn">Book Now</a>
+            @endauth
         </div>
     </div>
 </div>
