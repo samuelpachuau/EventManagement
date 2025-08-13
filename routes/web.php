@@ -52,7 +52,7 @@ Route::post('/logout', function () {
 
 
 Route::get('/events/{event}/book', [EventBookingController::class, 'create'])->name('events.book');
-Route::post('/events/{event}/book', [EventBookingController::class, 'store'])->name('events.book.store');
+Route::post('/events/{event}/book', [EventBookingController::class, 'book'])->name('events.book.store');
 
 Route::get('/debug-booking', function () {
     $booking = Booking::latest()->first(); // get latest booking
@@ -77,8 +77,22 @@ Route::get('/test-pdf/{id}', function ($id) {
 });
 
 
+
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
 //verifying ticket
 
 Route::get('/ticket/verify/{ticket_code}', [EventBookingController::class, 'directVerify'])
     ->name('ticket.directVerify');
+
+
+Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+
+Route::get('/book/{id}', [EventBookingController::class, 'create'])->name('book.event');
+
+Route::get('/test-mail', function () {
+    Mail::raw('This is a test email from Laravel using Mailtrap.', function ($message) {
+        $message->to('test@example.com')->subject('Test Mail');
+    });
+
+    return 'Mail sent!';
+});

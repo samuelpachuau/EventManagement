@@ -12,18 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('event_id');
-            $table->unsignedBigInteger('user_id'); 
-            $table->string('ticket_type'); 
-            $table->decimal('price', 8, 2);
-            $table->integer('quantity')->default(1);
-            $table->timestamps();
+    $table->id();
+    $table->unsignedBigInteger('event_id');
+    $table->unsignedBigInteger('user_id'); 
+    $table->string('ticket_type'); 
+    $table->decimal('price', 8, 2)->nullable();
+    $table->integer('quantity')->default(1);
 
-            
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+    // Add this for QR / verification
+    $table->string('code')->unique();
+
+    $table->timestamps();
+    $table->foreignId('booking_id')->constrained()->onDelete('cascade');
+
+    $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    
+});
+
     }
 
    

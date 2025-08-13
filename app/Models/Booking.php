@@ -13,6 +13,7 @@ class Booking extends Model
         'user_id', 
         'name',
         'email',
+        'checked_in'
     ];
 
     public function event()
@@ -23,5 +24,10 @@ class Booking extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    } 
+        public function ticket()
+    {
+    return $this->hasOne(Ticket::class);
     }
+
 }

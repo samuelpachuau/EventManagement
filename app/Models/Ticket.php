@@ -11,12 +11,13 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
-        'user_id',
-        'event_id',
-        'price',
-        'code',
-        'payment_id',
+    'ticket_type', // matches DB column
+    'user_id',
+    'event_id',
+    'price',
+    'code',
+    
+    'booking_id',
     ];
 
   
@@ -35,4 +36,19 @@ class Ticket extends Model
     {
         return $this->belongsTo(Payment::class);
     }
+
+    public function booking()
+{
+    return $this->belongsTo(Booking::class);
+}
+
+protected static function booted()
+{
+    static::creating(function ($ticket) {
+        if (empty($ticket->code)) {
+            $ticket->code = strtoupper(uniqid('TKT-')) . mt_rand(1000, 9999);
+        }
+    });
+}
+
 }

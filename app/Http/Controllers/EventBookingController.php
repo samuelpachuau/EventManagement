@@ -4,105 +4,88 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Event;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TicketMail;
-
+use Illuminate\Support\Facades\Log;
 class EventBookingController extends Controller
 {
-    // For authenticated user booking
-  public function book(Request $request)
+    /**
+     * Handle event booking for authenticated users
+     */
+    public function book(Request $request, Event $event)
 {
     $request->validate([
         'event_id' => 'required|exists:events,id',
     ]);
 
-    $event = Event::findOrFail($request->event_id);
-    $user = Auth::user();
-
-    // ✅ Prevent null user access
-    if (!$user) {
-        return redirect()->back()->with('error', 'You must be logged in to book this event.');
-    }
-
-    if (Booking::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
-        return redirect()->back()->with('error', 'You have already booked this event.');
-    }
-
-    $booking = Booking::create([
-        'user_id' => $user->id,
-        'event_id' => $event->id,
-        'name' => $user->name,
-        'email' => $user->email,
-    ]);
-
-    Mail::to($user->email)->send(new TicketMail($booking));
-
-    return redirect()->back()->with('success', 'Booking successful! Ticket sent to your email.');
-}
-
-
-   
-    public function create(Event $event)
-    {
-        return view('bookings.create', compact('event'));
-    }
-
-    // Store guest booking and send ticket
-    public function store(Request $request, Event $event)
-{
     $user = Auth::user();
 
     if (!$user) {
-        return redirect()->back()->with('error', 'You must be logged in to book this event.');
+        return back()->with('error', 'You must be logged in to book this event.');
     }
 
     
 
     $booking = Booking::create([
-        'user_id' => $user->id,
+        'user_id'  => $user->id,
         'event_id' => $event->id,
-        'name' => $user->name,
-        'email' => $user->email,
+        'name'     => $user->name,
+        'email'    => $user->email,
     ]);
 
-    Mail::to($user->email)->send(new TicketMail($booking));
+    $ticket = $booking->ticket()->create([
+        'ticket_type' => 'Standard',
+        'user_id'     => $user->id,
+        'event_id'    => $event->id,
+        'price'       => $event->price ?? 100,
+        'quantity'    => 1,
+        'payment_id'  => null,
+    ]);
 
-    return redirect()->route('events.book', $event->id)
-                     ->with('success', 'Booking successful! Ticket sent to your email.');
+    $ticket->load('booking.event', 'booking.user');
+
+    Mail::to($user->email)->send(new TicketMail($ticket));
+
+    return back()->with('success', 'Booking successful! Ticket sent to your email.');
 }
-//ticket verifyshow
-public function directVerify($ticketCode)
-{
-    $bookingId = trim(str_replace('Ticket-', '', $ticketCode));
 
 
-    $booking = Booking::with(['event', 'user'])->find($bookingId);
+    public function create(Event $event)
+    {
+        return view('bookings.create', compact('event'));
+    }
 
-    if ($booking) {
+    /**
+     * Ticket verification by code
+     */
+    public function directVerify($ticketCode)
+    {
+        $ticket = Ticket::where('code', $ticketCode)
+            ->with(['event', 'user', 'booking'])
+            ->first();
+
+        if (!$ticket) {
+            return view('tickets.verify', ['status' => 'invalid']);
+        }
+
+        $booking = $ticket->booking;
+
         if ($booking->checked_in) {
             return view('tickets.verify', [
-                'status' => 'already_checked_in',
+                'status'  => 'already_checked_in',
                 'booking' => $booking
             ]);
         }
 
         // Mark as checked in
-        $booking->checked_in = true;
-        $booking->save();
+        $booking->update(['checked_in' => 1]);
 
         return view('tickets.verify', [
-            'status' => 'valid',
+            'status'  => 'valid',
             'booking' => $booking
         ]);
     }
-
-    return view('tickets.verify', ['status' => 'invalid']);
 }
-
-
-}
-
-
-

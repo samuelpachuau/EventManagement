@@ -2,10 +2,10 @@
 
 namespace App\Mail;
 
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Booking;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -13,41 +13,39 @@ class TicketMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $booking;
+    public $ticket;
 
-    public function __construct(Booking $booking)
+    public function __construct(Ticket $ticket)
     {
-        // Ensure booking relations are loaded
-        $this->booking = $booking->loadMissing(['event', 'user']);
+        $this->ticket = $ticket;
     }
 
     public function build()
     {
-        // Defensive checks
-        $eventTitle = optional($this->booking->event)->title ?? 'Event';
-        $userEmail = optional($this->booking->user)->email;
+        // Get related booking, event, and user
+        $booking = $this->ticket->booking ?? null;
+        $eventTitle = optional($booking->event)->title ?? 'Event';
+        $userEmail  = optional($booking->user)->email;
 
         // Generate QR Code
-        $verifyUrl = route('ticket.directVerify', ['ticket_code' => 'Ticket-' . $this->booking->id]);
+        $verifyUrl = route('ticket.directVerify', ['ticket_code' => $this->ticket->code]);
 
-$qrCode = base64_encode(
-    QrCode::format('svg')->size(150)->generate($verifyUrl)
-);
-
-
+        $qrCodeRaw= 
+            QrCode::format('svg')->size(150)->generate($verifyUrl);
+         $qrCode = base64_encode($qrCodeRaw);
         // Generate PDF
         $pdf = Pdf::loadView('tickets.template', [
-            'booking' => $this->booking,
+            'booking' => $booking,
             'qrCode' => $qrCode,
         ]);
 
         return $this->subject('Your Ticket for ' . $eventTitle)
                     ->markdown('emails.ticket')
                     ->with([
-                        'booking' => $this->booking,
-                        'qrCode' => $qrCode,
+                        'booking' => $booking,
+                        'qrCode'  => $qrCode,
                     ])
-                    ->attachData($pdf->output(), 'ticket_' . $this->booking->id . '.pdf', [
+                    ->attachData($pdf->output(), $this->ticket->code. '.pdf', [
                         'mime' => 'application/pdf',
                     ]);
     }

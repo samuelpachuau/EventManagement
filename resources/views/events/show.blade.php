@@ -15,13 +15,21 @@
         </div>
         <div class="event-details-info">
             <h1>{{ $event->name }}</h1>
-            <p class="location">{{ $event->location }}</p>
-            <p class="datetime">
+
+            <p class="location">📍{{ $event->location }}</p>
+
+            <p class="datetime">📅
                 {{ $event->start_date->format('d M Y, h:i A') }} -
                 {{ $event->end_date->format('d M Y, h:i A') }}
             </p>
+
             <p class="description">{{ $event->description }}</p>
+
             <p class="organizer">Organized by: {{ $event->organizer->name ?? 'N/A' }}</p>
+
+            <p>Price: ₹{{ number_format($event->price, 2) }}</p>
+
+            <a href="{{ route('events.book', $event->id) }}" class="book-now-btn">Book Now</a>
         </div>
     </div>
 </div>
